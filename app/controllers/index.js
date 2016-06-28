@@ -3,7 +3,6 @@
 // modules
 const async = require('async');
 const brain = require('brain');
-const slug = require('slug');
 
 // models
 const AnswerModel = require('../models/answer');
