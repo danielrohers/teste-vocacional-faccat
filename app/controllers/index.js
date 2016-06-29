@@ -97,10 +97,9 @@ module.exports = {
 
         answer.save(err => {
             if (err) return res.status(500).json(err);
-            res.redirect('/student');
-            // _train(req.body)
-            //     .then(result => res.status(200).json(result))
-            //     .catch(err => res.status(500).json(err))
+            _train(req.body)
+                .then(result => res.status(200).json(result))
+                .catch(err => res.status(500).json(err))
         })
     },
 
