@@ -1,6 +1,7 @@
 'use strict';
 
 // modules
+const _ = require('lodash');
 const async = require('async');
 const brain = require('brain');
 
@@ -27,7 +28,9 @@ const _train = body => {
                     net.train(inputs);
                     let data = {};
                     for (let question in body) data[question] = body[question];
-                    resolve(net.run(data));
+                    let result = [];
+                    _.forEach(net.run(data), (value, course) => result.push({ course: course, value: value }) );
+                    resolve(_.orderBy(result, 'value', 'desc'));
                 } catch (err) {
                     reject(err);
                 }
