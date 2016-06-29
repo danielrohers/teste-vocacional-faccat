@@ -54,6 +54,11 @@ const _getQuestions = () => {
     });
 };
 
+const _responseTrain = (req, res, result) => {
+    _.take(result, 3).forEach(data => req.flash('info', data.course));
+    res.render('question');
+};
+
 // public
 module.exports = {
 
@@ -65,7 +70,7 @@ module.exports = {
         _getQuestions()
             .then(data => {
                 data.isStudent = true;
-                data.title = 'Estudante Faccat?'
+                data.title = 'Estudante Faccat?';
                 res.render('question', data);
             })
             .catch(next);
@@ -81,9 +86,10 @@ module.exports = {
             .catch(next);
     },
 
-    create : (req, res) => {
+    create : (req, res, next) => {
         let answer = new AnswerModel();
-        answer.output = req.body.other_course || req.body.course;
+        answer.output = req.body.course;
+        if (!!req.body.other_course && req.body.other_course != 'false') answer.output = req.body.other_course;
         delete req.body.course;
         delete req.body.other_course;
 
@@ -96,17 +102,17 @@ module.exports = {
         }
 
         answer.save(err => {
-            if (err) return res.status(500).json(err);
+            if (err) return next(err);
             _train(req.body)
-                .then(result => res.status(200).json(result))
-                .catch(err => res.status(500).json(err))
+                .then(result => _responseTrain(req, res, result))
+                .catch(next)
         })
     },
 
-    find : (req, res) => {
+    find : (req, res, next) => {
         _train(req.body)
-            .then(result => res.status(200).json(result))
-            .catch(err => res.status(500).json(err))
+            .then(result => _responseTrain(req, res, result))
+            .catch(next)
     }
 
 };
