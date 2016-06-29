@@ -2,7 +2,21 @@ extends layout
 
 block content
 
-  h1 Teste vocacional FACCAT
+  h3.text-center Teste vocacional FACCAT
 
-  a(href="/student") Estudante FACCAT?
-  a(href="/find") Não estudante?
+  p Objetivo desse teste é identificar em qual curso da Faccat o seu perfil se encaixa
+  p Esse teste se baseia totalmente em perfis já existentes de egressos da instituição
+
+  .demo-card-square.mdl-card.mdl-shadow--2dp.left
+    .mdl-card__title.mdl-card--expand
+      h2.mdl-card__title-text Estudante Faccat?
+    .mdl-card__supporting-text Se você já é estudante na Faccat, por favor, realize esse teste.
+    .mdl-card__actions.mdl-card--border
+      a.mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect(href="/student") Fazer o teste
+
+  .demo-card-square.mdl-card.mdl-shadow--2dp.right
+    .mdl-card__title.mdl-card--expand
+      h2.mdl-card__title-text Não estudante?
+    .mdl-card__supporting-text Se você não é estudante na Faccat, por favor, realize esse teste.
+    .mdl-card__actions.mdl-card--border
+      a.mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect(href="/find") Fazer o teste
