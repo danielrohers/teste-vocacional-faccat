@@ -17,11 +17,11 @@ const _filename = 'data.arff';
 
 const _deleteFile = cb => {
     if (!fs.existsSync(_filename)) return cb();
-    fs.unlink('treinamento.arff', cb);
+    fs.unlink(_filename, cb);
 };
 
 const _append = (text, cb) => {
-    fs.appendFile('treinamento.arff', `${text}\n`, cb);
+    fs.appendFile(_filename, `${text}\n`, cb);
 };
 
 const _err = err => console.log('ERR: ', err);
