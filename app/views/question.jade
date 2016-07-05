@@ -13,28 +13,25 @@ block content
   form(method="POST", action="#{isStudent ? '/student' : '/find'}")
     
     if isStudent && courses
-      .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label.is-upgraded
-        select.mdl-textfield__input(id="course" name="course" required)
-          option(value="")
-          each course in courses
-            option(value="#{course._id}") #{course.name}
-        label.mdl-textfield__label(for="course") Curso
+      select(id="course" name="course" required)
+        option(value="")
+        each course in courses
+          option(value="#{course._id}") #{course.name}
+      label(for="course") Curso
 
-      .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-        select.mdl-textfield__input(id="other_course" name="other_course" required)
-          option(value="")
-          option(value="false") Não
-          each course in courses
-            option(value="#{course._id}") #{course.name}
-        label.mdl-textfield__label(for="other_course") Gostaria de trocar de curso?
+      select(id="other_course" name="other_course" required)
+        option(value="")
+        option(value="false") Não
+        each course in courses
+          option(value="#{course._id}") #{course.name}
+      label(for="other_course") Gostaria de trocar de curso?
 
     if questions
       each question in questions
-        .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
-          select.mdl-textfield__input(name="#{question._id}" required)
-            option(value='')
-            each option in question.options
-              option(value="#{option._id}") #{option.value}
-          label.mdl-textfield__label(for="#{question._id}") #{question.question}
+        select(name="#{question._id}" required)
+          option(value='')
+          each option in question.options
+            option(value="#{option._id}") #{option.value}
+        label(for="#{question._id}") #{question.question}
 
       button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored(type="submit") Buscar
