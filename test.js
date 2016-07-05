@@ -15,7 +15,7 @@ const _train = answers => {
     answers.forEach(answer => {
         let data = { input : {}, output: {} };
         answer.input.forEach(input => data['input'][input.question] = input.option );
-        data['output'][answer.output.name] = 1;
+        data['output'][answer.output.name] = 0;
         inputs.push(data);
     });
     net.train(inputs, {
@@ -27,23 +27,29 @@ const _train = answers => {
     });
 };
 
+const _getInput = answer => {
+    let data = {}
+    answer.input.forEach(input => data[input.question] = input.option );
+    return data;
+};
+
+const _getClassify = input => {
+    let result = [];
+    _.forEach(net.run(input), (value, course) => result.push({ course: course, value: value }) );
+    return result;
+};
+
 AnswerModel
     .find({})
     .populate('output')
     .then(answers => {
-        let select = _.take(_.shuffle(answers), 15);
-
         _train(answers);
 
-        select.forEach(answer => {
-            console.log("course: ", answer.output.name);
+        let answer = _.shuffle(answers)[0];
+        console.log('course: ', answer.output.name);
 
-            let data = {};
-            answer.input.forEach(input => data[input.question] = input.option );
-
-            let result = [];
-            _.forEach(net.run(data), (value, course) => result.push({ course: course, value: value }) );
-            console.log(_.orderBy(result, 'value', 'desc'));
-        })
+        let input = _getInput(answer);
+        let result = _getClassify(input);
+        console.log('result: ',_.orderBy(result, 'value', 'desc'));
     })
     .catch(err => console.log('ERR: ', err));

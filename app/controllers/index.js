@@ -22,7 +22,7 @@ const _train = body => {
                     answers.forEach(answer => {
                         let data = { input : {}, output: {} };
                         answer.input.forEach(input => data['input'][input.question] = input.option );
-                        data['output'][answer.output.name] = 1;
+                        data['output'][answer.output.name] = 0;
                         inputs.push(data);
                     });
                     net.train(inputs);
