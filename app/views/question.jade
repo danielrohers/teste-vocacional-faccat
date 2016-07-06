@@ -1,5 +1,8 @@
 extends layout
 
+block head
+  link(rel="stylesheet", href="http://yui.yahooapis.com/pure/0.6.0/forms-min.css")
+
 block content
   h3= title
   
@@ -10,28 +13,28 @@ block content
         li.mdl-list__item(data-test="#{message}")
           span.mdl-list__item-primary-content= message.message
   
-  form(method="POST", action="#{isStudent ? '/student' : '/find'}")
+  form.pure-form.pure-form-stacked(method="POST", action="#{isStudent ? '/student' : '/find'}")
     
     if isStudent && courses
+      label(for="course") Curso
       select(id="course" name="course" required)
         option(value="")
         each course in courses
           option(value="#{course._id}") #{course.name}
-      label(for="course") Curso
 
+      label(for="other_course") Gostaria de trocar de curso?
       select(id="other_course" name="other_course" required)
         option(value="")
         option(value="false") Não
         each course in courses
           option(value="#{course._id}") #{course.name}
-      label(for="other_course") Gostaria de trocar de curso?
 
     if questions
       each question in questions
+        label(for="#{question._id}") #{question.question}
         select(name="#{question._id}" required)
           option(value='')
           each option in question.options
             option(value="#{option._id}") #{option.value}
-        label(for="#{question._id}") #{question.question}
 
       button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored(type="submit") Buscar

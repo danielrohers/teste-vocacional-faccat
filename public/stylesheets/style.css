@@ -68,26 +68,6 @@
   z-index: 900;
 }
 
-.mdl-layout-title {
-  color: #424242;
-}
-
-.mdl-textfield {
-  width: 100%;
-}
-
-.demo-card-square.mdl-card {
-  width: 320px;
-  height: 295px;
-  margin-top: 50px;
-  display: inline-block;
-}
-.demo-card-square > .mdl-card__title {
-  color: #fff;
-  background: #3F51B5;
-  height: 175px;
-}
-
 .left {
   float: left;
 }
@@ -98,4 +78,13 @@
 
 .text-center {
   text-align: center;
+}
+
+.pure-form.pure-form-stacked label {
+  margin-top: 1em;
+}
+
+.pure-form.pure-form-stacked select {
+  max-width: 100%;
+  margin-bottom: 1em;
 }
