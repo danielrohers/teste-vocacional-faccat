@@ -1,41 +1,43 @@
 extends layout
 
-block head
-  link(rel="stylesheet", href="http://yui.yahooapis.com/pure/0.6.0/forms-min.css")
-
 block content
   h3= title
   
   if flash && flash[0]
-    h6 Cursos relacionados com o seu perfil:
-    ul.demo-list-item.mdl-list
+    ul.collection.with-header
+      li.collection-header
+        h5 Cursos relacionados com o seu perfil
       for info in flash
         for data in info.message
-          li.mdl-list__item
-            span.mdl-list__item-primary-content #{data.course} - #{Math.round(data.value * 100) / 100}%
+          li.collection-item #{data.course} - #{Math.round(data.value * 100) / 100}%
   
-  form.pure-form.pure-form-stacked(method="POST", action="#{isStudent ? '/student' : '/find'}")
-    
-    if isStudent && courses
-      label(for="course") Curso
-      select(id="course" name="course" required)
-        option(value="")
-        each course in courses
-          option(value="#{course._id}") #{course.name}
+  .row
+    form.col.s12(method="POST", action="#{isStudent ? '/student' : '/find'}")
+      
+      if isStudent && courses
+        .input-field.col.s12
+          select(name="course" required)
+            option(value="")
+            each course in courses
+              option.black-text(value="#{course._id}") #{course.name}
+          label(for="course" data-error="wrong") Curso
 
-      label(for="other_course") Gostaria de trocar de curso?
-      select(id="other_course" name="other_course" required)
-        option(value="")
-        option(value="false") Não
-        each course in courses
-          option(value="#{course._id}") #{course.name}
+        .input-field.col.s12
+          select(id="other_course" name="other_course" required)
+            option(value="")
+            option(value="false") Não
+            each course in courses
+              option(value="#{course._id}") #{course.name}
+          label(for="other_course") Gostaria de trocar de curso?
 
-    if questions
-      each question in questions
-        label(for="#{question._id}") #{question.question}
-        select(name="#{question._id}" required)
-          option(value='')
-          each option in question.options
-            option(value="#{option._id}") #{option.value}
+      if questions
+        each question in questions
+          .input-field.col.s12
+            select(name="#{question._id}" required)
+              option(value='')
+              each option in question.options
+                option(value="#{option._id}") #{option.value}
+            label(for="#{question._id}") #{question.question}
 
-      button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored(type="submit") Buscar
+        button.btn.waves-effect.waves-light.indigo(type="submit") Enviar
+          i.material-icons.right send

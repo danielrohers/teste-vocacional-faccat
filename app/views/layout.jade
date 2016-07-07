@@ -2,28 +2,33 @@ doctype html
 html
   head
     title Teste vocacional Faccat #{title ? ' - ' + title : ''}
-    link(rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons")
-    link(rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.indigo-pink.min.css")
+
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css")
+    link(rel="stylesheet", href="https://fonts.googleapis.com/icon?family=Material+Icons")
     link(rel='stylesheet', href='/stylesheets/style.css')
-    block head
+
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
   body
-    .demo-layout.mdl-layout.mdl-layout--fixed-header.mdl-js-layout.mdl-color--grey-100
-      header.demo-header.mdl-layout__header.mdl-layout__header--scroll.mdl-color--grey-100.mdl-color-text--grey-800
-        .mdl-layout__header-row
-          a(href='/').mdl-layout-title Teste vocacional Faccat
-      .demo-ribbon
-      main.demo-main.mdl-layout__content
-        .demo-container.mdl-grid
-          .mdl-cell.mdl-cell--2-col.mdl-cell--hide-tablet.mdl-cell--hide-phone
-          .demo-content.mdl-color--white.mdl-shadow--4dp.content.mdl-color-text--grey-800.mdl-cell.mdl-cell--8-col
-            block content
-        footer.demo-footer.mdl-mini-footer
-            .mdl-mini-footer--left-section
-              ul.mdl-mini-footer--link-list
-                li
-                  a(href='https://www2.faccat.br/portal' target="_blank") Faccat
-                li
-                  a(href='https://fit.faccat.br/ead' target="_blank") Sistemas de Informação | Tecnólogo Sistemas para Internet | Jogos Digitais
   
-    script(defer src="https://code.getmdl.io/1.1.3/material.min.js")
-    block defer
+    nav.white
+      .nav-wrapper
+          a.indigo-text.brand-logo(href='/') Teste vocacional Faccat
+
+    .ribbon.indigo
+
+    .container
+      .card-panel
+        block content
+
+    footer.page-footer.white
+      .container
+        .row
+          ul
+            li
+              a.grey-text(href='https://www2.faccat.br/portal' target="_blank") Faccat
+            li
+              a.grey-text(href='https://fit.faccat.br/ead' target="_blank") Sistemas de Informação | Tecnólogo Sistemas para Internet | Jogos Digitais
+  
+    script(defer src="https://code.jquery.com/jquery-2.1.1.min.js")
+    script(defer src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js")
+    script(defer src="/js/main.js")
