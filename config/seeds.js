@@ -1,5 +1,3 @@
-'use strict';
-
 require('./mongoose');
 const QuestionModel = require('../app/models/question');
 const CourseModel = require('../app/models/course');

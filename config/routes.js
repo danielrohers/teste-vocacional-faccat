@@ -1,5 +1,3 @@
-'use strict';
-
 const _require = module => require(`../app/routes/${module}`);
 
 module.exports = app => {

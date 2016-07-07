@@ -9,9 +9,10 @@ block content
   if flash && flash[0]
     h6 Cursos relacionados com o seu perfil:
     ul.demo-list-item.mdl-list
-      for message in flash
-        li.mdl-list__item(data-test="#{message}")
-          span.mdl-list__item-primary-content= message.message
+      for info in flash
+        for data in info.message
+          li.mdl-list__item
+            span.mdl-list__item-primary-content #{data.course} - #{Math.round(data.value * 100) / 100}%
   
   form.pure-form.pure-form-stacked(method="POST", action="#{isStudent ? '/student' : '/find'}")
     

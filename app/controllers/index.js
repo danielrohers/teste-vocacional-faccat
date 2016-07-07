@@ -1,43 +1,15 @@
-'use strict';
-
 // modules
 const _ = require('lodash');
 const async = require('async');
-const brain = require('brain');
 
 // models
 const AnswerModel = require('../models/answer');
 const QuestionModel = require('../models/question');
 const CourseModel = require('../models/course');
 
-const _train = body => {
-    return new Promise((resolve, reject) => {
-        const net = new brain.NeuralNetwork();
-        AnswerModel
-            .find({})
-            .populate('output')
-            .then(answers => {
-                try {
-                    let inputs = [];
-                    answers.forEach(answer => {
-                        let data = { input : {}, output: {} };
-                        answer.input.forEach(input => data['input'][input.question] = input.option );
-                        data['output'][answer.output.name] = 0;
-                        inputs.push(data);
-                    });
-                    net.train(inputs);
-                    let data = {};
-                    for (let question in body) data[question] = body[question];
-                    let result = [];
-                    _.forEach(net.run(data), (value, course) => result.push({ course: course, value: value }) );
-                    resolve(_.orderBy(result, 'value', 'desc'));
-                } catch (err) {
-                    reject(err);
-                }
-            })
-            .catch(reject);
-    });
-};
+// services
+const BrainService = require('../services/brain');
+const WekaService = require('../services/weka');
 
 const _getQuestions = () => {
     return new Promise((resolve, reject) => {
@@ -54,8 +26,20 @@ const _getQuestions = () => {
     });
 };
 
+const _train = input => {
+    return new Promise((resolve, reject) => {
+        async.parallel({
+            weka : async.apply(WekaService.run, input),
+            brain : async.apply(BrainService.run, input)
+        }, (err, result) => {
+            if (err) return reject(err);
+            resolve(_.concat(result.weka, result.brain));
+        });
+    });
+};
+
 const _responseTrain = (req, res, result) => {
-    _.take(result, 3).forEach(data => req.flash('info', data.course));
+    req.flash('info', _.take(result, 3));
     res.render('question');
 };
 
@@ -99,14 +83,14 @@ module.exports = {
                 question: question,
                 option: req.body[question]
             });
-        }
+        };
 
         answer.save(err => {
             if (err) return next(err);
             _train(req.body)
                 .then(result => _responseTrain(req, res, result))
                 .catch(next)
-        })
+        });
     },
 
     find : (req, res, next) => {

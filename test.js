@@ -1,5 +1,3 @@
-'use strict';
-
 require('./config/mongoose');
 
 const AnswerModel = require('./app/models/answer');
@@ -41,7 +39,7 @@ const _addClass = (filename, cb) => {
     CourseModel
         .find({})
         .then(courses => {
-            _append(filename, `\n@ATTRIBUTE class {${ courses.map(course => slug(course.name)).join() }}\n`, cb);
+            _append(filename, `\n@ATTRIBUTE class {${ courses.map(course => course._id).join() }}\n`, cb);
         })
         .catch(cb)
 };
@@ -49,9 +47,9 @@ const _addClass = (filename, cb) => {
 const _addData = (filename, answers, cb) => {
     _append(filename, '@DATA')
     answers.forEach(answer => {
-        var values = [];
+        let values = [];
         answer.input.forEach(input => values.push(input.option) );
-        values.push(slug(answer.output.name));
+        values.push(/test/.test(filename) ? '?' : answer.output._id);
         _append(filename, values.join());
     });
     cb();
@@ -108,21 +106,17 @@ const _init = () => {
 
         console.log('data files created');
 
-        var options = {
+        let options = {
           'classifier': 'weka.classifiers.functions.MultilayerPerceptron',
           'params'    : ''
         };
 
-        let command = `java -classpath weka.jar ${options.classifier} ${options.params} -t data-training.arff -T data-test.arff -no-cv -v -p 0`;
+        let command = `java -classpath weka.jar ${options.classifier} ${options.params} -t data-training.arff -T data-test.arff -p 0`;
 
         exec(command, (err, stdout, stderr) => {
             if(err) return console.log('ERR: ', err);
 
             console.log('stdout: ', stdout);
-
-            // _clean(stdout.split('\n')).slice(2).forEach(value => {
-            //     console.log('value: ', _clean(value.split(' ')).slice(2));
-            // });
         });
     });
 };

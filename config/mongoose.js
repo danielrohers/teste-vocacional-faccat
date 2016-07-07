@@ -1,5 +1,3 @@
-'use strict';
-
 const mongoose = require('mongoose');
 
 const CONN_STR = 'mongodb://personalidade-estudantes-faccat:<V-7nTbN@ds023644.mlab.com:23644/personalidade-estudantes-faccat' || 'mongodb://localhost:27017/personalidade-estudantes-faccat';
