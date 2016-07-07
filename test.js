@@ -8,7 +8,6 @@ const async = require('async');
 const fs = require('fs');
 const _ = require('lodash');
 const brain = require('brain');
-const slug = require('slug');
 const exec = require('child_process').exec;
 
 const _deleteFile = (filename, cb) => {
