@@ -9,6 +9,10 @@ const fs = require('fs');
 const _ = require('lodash');
 const brain = require('brain');
 const exec = require('child_process').exec;
+const slug = require('slug');
+
+const _fileTraining = './training.arff';
+const _fileTest = './test.arff';
 
 const _deleteFile = (filename, cb) => {
     if (!fs.existsSync(filename)) return cb();
@@ -38,7 +42,7 @@ const _addClass = (filename, cb) => {
     CourseModel
         .find({})
         .then(courses => {
-            _append(filename, `\n@ATTRIBUTE class {${ courses.map(course => course._id).join() }}\n`, cb);
+            _append(filename, `\n@ATTRIBUTE class {${ courses.map(course => slug(course.name)).join() }}\n`, cb);
         })
         .catch(cb)
 };
@@ -48,7 +52,8 @@ const _addData = (filename, answers, cb) => {
     answers.forEach(answer => {
         let values = [];
         answer.input.forEach(input => values.push(input.option) );
-        values.push(/test/.test(filename) ? '?' : answer.output._id);
+        values.push(slug(answer.output.name));
+        // values.push(/test/.test(filename) ? '?' : slug(answer.output.name));
         _append(filename, values.join());
     });
     cb();
@@ -76,7 +81,7 @@ const _getAnswers = () => {
 const _createDataTraining = cb => {
     _getAnswers()
         .then(answers => {
-            _createData('./data-training.arff', answers)
+            _createData(_fileTraining, answers)
                 .then(cb)
                 .catch(cb)
         })
@@ -87,7 +92,7 @@ const _createDataTest = cb => {
     _getAnswers()
         .then(answers => {
             let data = _.take(_.shuffle(answers), 15);
-            _createData('./data-test.arff', data)
+            _createData(_fileTest, data)
                 .then(cb)
                 .catch(cb)
         })
@@ -110,7 +115,7 @@ const _init = () => {
           'params'    : ''
         };
 
-        let command = `java -classpath weka.jar ${options.classifier} ${options.params} -t data-training.arff -T data-test.arff -p 0`;
+        let command = `java -classpath weka.jar ${options.classifier} ${options.params} -t ${_fileTraining} -T ${_fileTest} -p 0`;
 
         exec(command, (err, stdout, stderr) => {
             if(err) return console.log('ERR: ', err);
