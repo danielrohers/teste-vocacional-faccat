@@ -85,9 +85,14 @@ const _clean = array => array.filter(value => !!value);
 // public
 module.exports = {
 
+    train : _createDataTraining,
+
     run : (input, cb) => {
         async.parallel([
-            async.apply(_createDataTraining),
+            cb => {
+                if (_existFile(_fileTraining)) return cb();
+                _createDataTraining(cb);
+            },
             async.apply(_createData, _fileTest, input)
         ], err => {
             if (err) return cb(err);
@@ -101,7 +106,9 @@ module.exports = {
 
             exec(command, (err, stdout, stderr) => {
                 if(err) return cb(err);
+                if (stderr) return cb(stderr);
                 try {
+                    console.log("stdout: ", stdout);
                     let output = _clean(_clean(stdout.split('\n')).slice(2)[0].split(',')).slice(2);
 
                     let result = {

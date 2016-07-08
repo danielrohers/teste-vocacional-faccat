@@ -87,9 +87,12 @@ module.exports = {
 
         answer.save(err => {
             if (err) return next(err);
-            _train(req.body)
-                .then(result => _responseTrain(req, res, result))
-                .catch(next)
+            WekaService.train(err => {
+                if (err) return next(err);
+                _train(req.body)
+                    .then(result => _responseTrain(req, res, result))
+                    .catch(next)
+            });
         });
     },
 
