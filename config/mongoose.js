@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const CONN_STR = 'mongodb://localhost:27017/personalidade-estudantes-faccat';
+const CONN_STR = process.env.DATABASE_RNA_URL || 'mongodb://localhost:27017/personalidade-estudantes-faccat';
 
 if (process.env.NODE_ENV === 'development') mongoose.set('debug', true);
 
